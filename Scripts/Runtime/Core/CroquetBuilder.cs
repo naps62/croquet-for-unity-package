@@ -894,15 +894,15 @@ public class CroquetBuilder
     private static int RunNPMInstall(string jsBuildFolder, string toolsRoot)
     {
         string nodePath = "";
-        bool onOSX = Application.platform == RuntimePlatform.OSXEditor;
-        if (onOSX)
+        bool onOSXorLinux = Application.platform == RuntimePlatform.OSXEditor || Application.platform == RuntimePlatform.LinuxEditor;
+        if (onOSXOrLinux)
         {
             string nodeExecutable = GetSceneBuildDetails().nodeExecutable;
             nodePath = Path.GetDirectoryName(nodeExecutable);
         }
 
         int errorCount = 0;
-        Task task = onOSX
+        Task task = onOSXorLinux
             ? new Task(() => errorCount = InstallOSX(jsBuildFolder, toolsRoot, nodePath))
             : new Task(() => errorCount = InstallWin(jsBuildFolder, toolsRoot));
         task.Start();
